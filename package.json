@@ -1,44 +1,17 @@
 {
   "name": "@qonsoll/firebase-services",
-  "version": "1.0.0",
+  "version": "1.0.8",
   "description": "",
-  "scripts": {
-    "build": "npm run clean && rollup -c",
-    "clean": "rimraf ./dist ./auth/dist ./database/dist ./firestore/dist ./storage/dist ./init/dist",
-    "prepare": "npm run build"
-  },
-  "author": "",
-  "license": "ISC",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
-  "files": [
-    "auth/dist/*.js",
-    "auth/dist/auth",
-    "auth/package.json",
-    "database/dist/*.js",
-    "database/dist/database",
-    "database/package.json",
-    "dist/*.js",
-    "dist/*.js.map",
-    "firestore/dist/*.js",
-    "firestore/dist/firestore",
-    "firestore/package.json",
-    "storage/dist/*.js",
-    "storage/dist/storage",
-    "storage/package.json",
-    "init/dist/*.js",
-    "init/dist/init",
-    "init/package.json"
-  ],
+  "scripts": {},
+  "author": "qonsoll",
+  "license": "MIT",
   "peerDependencies": {
     "firebase": ">= 8.8.0"
   },
+  "requireConfigFile":"false",
   "devDependencies": {
-    "@babel/cli": "^7.14.8",
     "@babel/core": "^7.14.8",
-    "@babel/plugin-transform-modules-commonjs": "^7.14.5",
-    "@rollup/plugin-commonjs": "^20.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.4",
+    "@babel/eslint-parser": "^7.14.9",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-babel": "^5.3.1",
@@ -46,10 +19,7 @@
     "eslint-plugin-jsdoc": "^36.0.6",
     "eslint-plugin-prettier": "^3.4.0",
     "firebase": "^8.8.1",
-    "prettier": "^2.3.2",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.55.1",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-terser": "^7.0.2"
+    "lodash": "^4.17.21",
+    "prettier": "^2.3.2"
   }
 }

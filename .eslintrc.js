@@ -1,7 +1,10 @@
 module.exports = {
   extends: ['prettier'],
   root: true,
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
+  parserOptions: {
+    requireConfigFile: false
+  },
   plugins: ['import', 'prettier'],
   settings: {
     'import/resolver': {
@@ -12,7 +15,7 @@ module.exports = {
   },
   rules: {
     semi: [2, 'never'],
-    // 'no-console': 'error',
+    'no-console': 'error',
     'import/no-named-as-default': 0,
     'no-return-await': 2,
     'prettier/prettier': 'error'
