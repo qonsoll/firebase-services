@@ -1,68 +1,170 @@
-import { resolve } from 'path'
-import { terser } from 'rollup-plugin-terser'
+// import { resolve as pathResolve } from 'path'
 
+// Importing plugins for rollup.
+import { babel } from '@rollup/plugin-babel'
+import { terser } from 'rollup-plugin-terser'
+import resolve from '@rollup/plugin-node-resolve'
 import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 import commonjs from '@rollup/plugin-commonjs'
-import { nodeResolve } from '@rollup/plugin-node-resolve'
+import copy from 'rollup-plugin-copy'
 
-import pkg from './package.json'
-import authPkg from './auth/package.json'
-import databasePkg from './database/package.json'
-import firestorePkg from './firestore/package.json'
-import storagePkg from './storage/package.json'
-import initPkg from './init/package.json'
+// Importing all package.json to create correct package build.
+import mainPkg from './package.json'
+// import fbPkg from './src/hooks/useFirebase/package.json'
+// import authPkg from './src/hooks/useAuthServices/package.json'
+// import databasePkg from './src/hooks/useDatabaseServices/package.json'
+// import firestorePkg from './src/hooks/useFirestoreServices/package.json'
+// import storagePkg from './src/hooks/useStorageServices/package.json'
 
-const pkgsByName = {
-  auth: authPkg,
-  database: databasePkg,
-  firestore: firestorePkg,
-  storage: storagePkg,
-  init: initPkg
-}
+// // Creating map with information about every subpackage getting from their package.json.
+// const pkgsByName = {
+//   firebase: fbPkg,
+//   auth: authPkg,
+//   database: databasePkg,
+//   firestore: firestorePkg,
+//   storage: storagePkg
+// }
 
-const components = ['auth', 'database', 'firestore', 'storage', 'init']
+// Creating reference map between subpackage name and it folder name in hooks folder.
+const components = [
+  { path: 'useFirebase', name: 'firebase' },
+  { path: 'useAuthServices', name: 'auth' },
+  { path: 'useDatabaseServices', name: 'database' },
+  { path: 'useFirestoreServices', name: 'firestore' },
+  { path: 'useStorageServices', name: 'storage' }
+]
 
-const peerDependencies = pkg.peerDependencies || {}
+// Declaring peer dependencies for package. Get some from main package.json and add additional dependencies.
+const peerDependencies = mainPkg.peerDependencies || {}
 const external = [
   ...Object.keys(peerDependencies),
+  'react-dom',
   'firebase/auth',
   'firebase/database',
   'firebase/firestore',
   'firebase/storage'
 ]
 
-const plugins = [peerDepsExternal(), commonjs(), nodeResolve()]
+// Configure additional plugins for build
+const plugins = [
+  // This package doing magic with dependencies and package size reduce twice.
+  peerDepsExternal(),
+  babel({
+    plugins: ['@babel/plugin-syntax-jsx'],
+    exclude: 'node_modules/**',
+    presets: ['@babel/preset-react']
+  }),
+  commonjs(),
+  resolve()
+]
 
+// Going throw reference map and generating one array of bundles.
 export default components
-  .map((component) => {
-    const pkg = pkgsByName[component]
+  .map(() => {
+    // // Get package.json information for current subpackage.
+    // const pkg = pkgsByName[name]
+    //
+    // // There is path to source in
+    // const sourceInputPath = `src/hooks/${path}`
+
     return [
+      // /*
+      //  *
+      //  */
+      // {
+      //   input: `${sourceInputPath}/index.js`,
+      //   output: [
+      //     {
+      //       file: pathResolve(name, pkg.main),
+      //       format: 'cjs',
+      //       hoistTransitiveImports: false
+      //     },
+      //     {
+      //       file: pathResolve(name, pkg.module),
+      //       format: 'es',
+      //       hoistTransitiveImports: false
+      //     }
+      //   ],
+      //   plugins: [
+      //     ...plugins,
+      //     /*
+      //      *  Copy package.json files to be able import functions like subpackage.
+      //      *  e.g. import useFirestoreServices from "@qonsoll/firebase-services/firestore"
+      //      *       to import only useFirestoreServices hook.
+      //      */
+      //     copy({
+      //       targets: [
+      //         {
+      //           src: `${sourceInputPath}/package.json`,
+      //           dest: name
+      //         }
+      //       ]
+      //     })
+      //   ],
+      //   external
+      // }
+      // /*
+      //  *  TODO: Need to research about 'iife' format of package and document this part of build script.
+      //  */
+      // {
+      //   input: `${sourceInputPath}/index.js`,
+      //   output: [
+      //     {
+      //       file: `dist/qonsoll-firebase-sevices-${name}.js`,
+      //       format: 'iife',
+      //       sourcemap: true,
+      //       extend: true,
+      //       name: '@qonsoll/firebase-service',
+      //       globals: {
+      //         firebase: 'firebase',
+      //         react: 'React'
+      //       }
+      //     }
+      //   ],
+      //   plugins,
+      //   external
+      // }
+    ]
+  })
+  .reduce(
+    (a, b) => a.concat(b),
+    [
+      /*
+       *  Build main index to be able import all hooks or components you want from one place.
+       */
       {
-        input: `${component}/index.js`,
-        output: [
-          { file: resolve(component, pkg.main), format: 'cjs' },
-          { file: resolve(component, pkg.module), format: 'es' }
+        input: {
+          'dist/index.esm': 'src/index.js',
+          'firebase/dist/index.esm': 'src/hooks/useFirebase',
+          'firestore/dist/index.esm': 'src/hooks/useFirestoreServices'
+        },
+        output: {
+          dir: './',
+          format: 'es',
+          chunkFileNames: 'dist/[name]-[hash].js'
+        },
+        // Adding minification(using terser plugin) for this files reduce size of bundle twice.
+        plugins: [
+          ...plugins,
+          terser(),
+          copy({
+            targets: [
+              {
+                src: `src/hooks/useFirebase/package.json`,
+                dest: 'firebase'
+              }
+            ]
+          }),
+          copy({
+            targets: [
+              {
+                src: `src/hooks/useFirestoreServices/package.json`,
+                dest: 'firestore'
+              }
+            ]
+          })
         ],
-        plugins,
-        external
-      },
-      {
-        input: `${component}/index.js`,
-        output: [
-          {
-            file: `dist/qonsoll-firebase-sevices-${component}.js`,
-            format: 'iife',
-            sourcemap: true,
-            extend: true,
-            name: '@qonsoll/firebase-service',
-            globals: {
-              firebase: 'firebase'
-            }
-          }
-        ],
-        plugins: [...plugins, terser()],
         external
       }
     ]
-  })
-  .reduce((a, b) => a.concat(b), [])
+  )

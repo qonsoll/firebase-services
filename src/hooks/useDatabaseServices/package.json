@@ -1,5 +1,5 @@
 {
-  "name": "@qonsoll/firebase-storage/auth",
+  "name": "@qonsoll/firebase-services/database",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js"
 }
