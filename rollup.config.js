@@ -1,12 +1,13 @@
 // import { resolve as pathResolve } from 'path'
-
 // Importing plugins for rollup.
-import { babel } from '@rollup/plugin-babel'
 import { terser } from 'rollup-plugin-terser'
 import resolve from '@rollup/plugin-node-resolve'
 import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 import commonjs from '@rollup/plugin-commonjs'
 import copy from 'rollup-plugin-copy'
+import typescript from 'rollup-plugin-typescript2'
+
+import dts from 'rollup-plugin-dts'
 
 // Importing all package.json to create correct package build.
 import mainPkg from './package.json'
@@ -49,13 +50,17 @@ const external = [
 const plugins = [
   // This package doing magic with dependencies and package size reduce twice.
   peerDepsExternal(),
-  babel({
-    plugins: ['@babel/plugin-syntax-jsx'],
-    exclude: 'node_modules/**',
-    presets: ['@babel/preset-react']
-  }),
+  // babel({
+  //   plugins: ['@babel/plugin-syntax-jsx'],
+  //   exclude: 'node_modules/**',
+  //   presets: ['@babel/preset-react']
+  // }),
   commonjs(),
-  resolve()
+  resolve(),
+  typescript({
+    typescript: require('typescript'),
+    useTsconfigDeclarationDir: true
+  })
 ]
 
 // Going throw reference map and generating one array of bundles.
@@ -72,7 +77,7 @@ export default components
       //  *
       //  */
       // {
-      //   input: `${sourceInputPath}/index.js`,
+      //   input: `${sourceInputPath}/index.ts`,
       //   output: [
       //     {
       //       file: pathResolve(name, pkg.main),
@@ -107,7 +112,7 @@ export default components
       //  *  TODO: Need to research about 'iife' format of package and document this part of build script.
       //  */
       // {
-      //   input: `${sourceInputPath}/index.js`,
+      //   input: `${sourceInputPath}/index.ts`,
       //   output: [
       //     {
       //       file: `dist/qonsoll-firebase-sevices-${name}.js`,
@@ -134,9 +139,9 @@ export default components
        */
       {
         input: {
-          'dist/index.esm': 'src/index.js',
-          'firebase/dist/index.esm': 'src/hooks/useFirebase',
-          'firestore/dist/index.esm': 'src/hooks/useFirestoreServices'
+          'dist/index.esm': 'src/index.ts',
+          'firebase/dist/index.esm': 'src/hooks/useFirebase/index.ts',
+          'firestore/dist/index.esm': 'src/hooks/useFirestoreServices/index.ts'
         },
         output: {
           dir: './',
@@ -146,6 +151,7 @@ export default components
         // Adding minification(using terser plugin) for this files reduce size of bundle twice.
         plugins: [
           ...plugins,
+          // flatDts(),
           terser(),
           copy({
             targets: [
@@ -165,6 +171,16 @@ export default components
           })
         ],
         external
+      },
+      {
+        // path to your declaration files root
+        input: {
+          'dist/index': 'src/index.d.ts',
+          'firebase/dist/index': 'src/hooks/useFirebase/types.d.ts',
+          'firestore/dist/index': 'src/hooks/useFirestoreServices/types.d.ts'
+        },
+        output: [{ dir: './', format: 'es' }],
+        plugins: [dts()]
       }
     ]
   )

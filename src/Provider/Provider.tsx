@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
+import { useEffect } from 'react'
 import { initFirebaseApp } from '../services/init'
 import FirebaseServicesContext from './context'
+import { ProviderProps } from './types'
 
-const Provider = (props) => {
+const Provider = (props: ProviderProps) => {
   const { firebase, config, ...rest } = props
 
   // [USE_EFFECTS]
@@ -26,20 +26,8 @@ const Provider = (props) => {
       isComponentMount = false
     }
   }, [firebase, config])
-  return <FirebaseServicesContext.Provider value={firebase} {...rest} />
-}
 
-Provider.propTypes = {
-  firebase: PropTypes.object.isRequired,
-  config: PropTypes.shape({
-    apiKey: PropTypes.string,
-    authDomain: PropTypes.string,
-    databaseURL: PropTypes.string,
-    projectId: PropTypes.string,
-    storageBucket: PropTypes.string,
-    messagingSenderId: PropTypes.string,
-    appId: PropTypes.string
-  })
+  return <FirebaseServicesContext.Provider value={firebase} {...rest} />
 }
 
 export default Provider

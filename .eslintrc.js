@@ -2,8 +2,8 @@ module.exports = {
   extends: ['react-app', 'prettier'],
   root: true,
   parserOptions: {
-    requireConfigFile: false,
     ecmaVersion: 2020,
+    sourceType: 'module',
     ecmaFeatures: {
       legacyDecorators: true,
       jsx: true
@@ -12,15 +12,16 @@ module.exports = {
   env: {
     node: true
   },
-  parser: '@babel/eslint-parser',
-  plugins: ['import', 'babel', 'react', 'react-hooks', 'prettier'],
+  parser: '@typescript-eslint/parser',
+  plugins: ['import', 'react', 'react-hooks', 'prettier', '@typescript-eslint'],
   settings: {
     react: {
       version: '17'
     },
     'import/resolver': {
       node: {
-        moduleDirectory: ['node_modules', '/']
+        moduleDirectory: ['node_modules', '/'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx']
       }
     }
   },
