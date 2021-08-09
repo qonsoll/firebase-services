@@ -4,9 +4,8 @@ import firebase from 'firebase/app'
 
 /**
  * @info getCollectionRef (06 Apr 2021) // CREATION DATE
- *
- * @comment getCollectionRef - function for get collection reference.
  * @access private
+ * @comment getCollectionRef - function for get collection reference.
  * @since 05 Aug 2021 ( v.0.0.2 ) // LAST-EDIT DATE
  *
  * @param 		firestore		The Cloud Firestore service interface.

@@ -1,11 +1,12 @@
 import 'firebase/firestore'
 import { useCallback } from 'react'
 import useFirebase from '../useFirebase'
-import { getCollectionRef as getCollectionRefService } from '../../services/firestore'
+import * as services from '../../services/firestore'
 
 /**
  * @typedef {object} firestoreServices
  * @property {function} getCollectionRef - {@link getCollectionRef documentation}
+ * @property {function} getDocumentRef   - {@link getDocumentRef documentation}
  *
  *
  */
@@ -13,7 +14,7 @@ import { getCollectionRef as getCollectionRefService } from '../../services/fire
 /**
  * @function useFirestoreServices
  * @access public
- * @info getCollectionRef (06 Apr 2021) // CREATION DATE
+ * @info useFirestoreServices (01 Aug 2021) // CREATION DATE
  * @since 08 Aug 2021 // LAST-EDIT DATE
  * @version 0.0.1
  *
@@ -25,12 +26,17 @@ const useFirestoreServices = () => {
   const firestore = firebase!.firestore()
 
   const getCollectionRef = useCallback(
-    (path: string) => getCollectionRefService(firestore, path),
+    (path: string) => services.getCollectionRef(firestore, path),
+    [firestore]
+  )
+  const getDocumentRef = useCallback(
+    (path: string) => services.getDocumentRef(firestore, path),
     [firestore]
   )
 
   return {
-    getCollectionRef
+    getCollectionRef,
+    getDocumentRef
   }
 }
 

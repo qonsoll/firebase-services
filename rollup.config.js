@@ -1,38 +1,24 @@
-// import { resolve as pathResolve } from 'path'
+import _ from 'lodash'
+import mainPkg from './package.json'
+
 // Importing plugins for rollup.
-import { terser } from 'rollup-plugin-terser'
 import resolve from '@rollup/plugin-node-resolve'
-import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 import commonjs from '@rollup/plugin-commonjs'
+import peerDepsExternal from 'rollup-plugin-peer-deps-external'
+import { terser } from 'rollup-plugin-terser'
 import copy from 'rollup-plugin-copy'
 import typescript from 'rollup-plugin-typescript2'
-
 import dts from 'rollup-plugin-dts'
 
-// Importing all package.json to create correct package build.
-import mainPkg from './package.json'
-// import fbPkg from './src/hooks/useFirebase/package.json'
-// import authPkg from './src/hooks/useAuthServices/package.json'
-// import databasePkg from './src/hooks/useDatabaseServices/package.json'
-// import firestorePkg from './src/hooks/useFirestoreServices/package.json'
-// import storagePkg from './src/hooks/useStorageServices/package.json'
-
-// // Creating map with information about every subpackage getting from their package.json.
-// const pkgsByName = {
-//   firebase: fbPkg,
-//   auth: authPkg,
-//   database: databasePkg,
-//   firestore: firestorePkg,
-//   storage: storagePkg
-// }
+const buildFolder = 'dist'
 
 // Creating reference map between subpackage name and it folder name in hooks folder.
-const components = [
+const subpackages = [
   { path: 'useFirebase', name: 'firebase' },
-  { path: 'useAuthServices', name: 'auth' },
-  { path: 'useDatabaseServices', name: 'database' },
-  { path: 'useFirestoreServices', name: 'firestore' },
-  { path: 'useStorageServices', name: 'storage' }
+  // { path: 'useAuthServices', name: 'auth' },
+  // { path: 'useDatabaseServices', name: 'database' },
+  { path: 'useFirestoreServices', name: 'firestore' }
+  // { path: 'useStorageServices', name: 'storage' }
 ]
 
 // Declaring peer dependencies for package. Get some from main package.json and add additional dependencies.
@@ -48,139 +34,93 @@ const external = [
 
 // Configure additional plugins for build
 const plugins = [
-  // This package doing magic with dependencies and package size reduce twice.
-  peerDepsExternal(),
-  // babel({
-  //   plugins: ['@babel/plugin-syntax-jsx'],
-  //   exclude: 'node_modules/**',
-  //   presets: ['@babel/preset-react']
-  // }),
+  peerDepsExternal(), // peerDepsExternal plugin doing magic with dependencies and package size reduce twice.
+  terser(), // terser plugin doing code uglify and package size reduce twice.
   commonjs(),
   resolve(),
   typescript({
-    typescript: require('typescript'),
-    useTsconfigDeclarationDir: true
+    typescript: require('typescript')
   })
 ]
 
-// Going throw reference map and generating one array of bundles.
-export default components
-  .map(() => {
-    // // Get package.json information for current subpackage.
-    // const pkg = pkgsByName[name]
-    //
-    // // There is path to source in
-    // const sourceInputPath = `src/hooks/${path}`
+const copyPluginConfig = subpackages.map(({ name, path }) => {
+  const sourceInputPath = `src/hooks/${path}`
 
-    return [
-      // /*
-      //  *
-      //  */
-      // {
-      //   input: `${sourceInputPath}/index.ts`,
-      //   output: [
-      //     {
-      //       file: pathResolve(name, pkg.main),
-      //       format: 'cjs',
-      //       hoistTransitiveImports: false
-      //     },
-      //     {
-      //       file: pathResolve(name, pkg.module),
-      //       format: 'es',
-      //       hoistTransitiveImports: false
-      //     }
-      //   ],
-      //   plugins: [
-      //     ...plugins,
-      //     /*
-      //      *  Copy package.json files to be able import functions like subpackage.
-      //      *  e.g. import useFirestoreServices from "@qonsoll/firebase-services/firestore"
-      //      *       to import only useFirestoreServices hook.
-      //      */
-      //     copy({
-      //       targets: [
-      //         {
-      //           src: `${sourceInputPath}/package.json`,
-      //           dest: name
-      //         }
-      //       ]
-      //     })
-      //   ],
-      //   external
-      // }
-      // /*
-      //  *  TODO: Need to research about 'iife' format of package and document this part of build script.
-      //  */
-      // {
-      //   input: `${sourceInputPath}/index.ts`,
-      //   output: [
-      //     {
-      //       file: `dist/qonsoll-firebase-sevices-${name}.js`,
-      //       format: 'iife',
-      //       sourcemap: true,
-      //       extend: true,
-      //       name: '@qonsoll/firebase-service',
-      //       globals: {
-      //         firebase: 'firebase',
-      //         react: 'React'
-      //       }
-      //     }
-      //   ],
-      //   plugins,
-      //   external
-      // }
-    ]
-  })
-  .reduce(
-    (a, b) => a.concat(b),
-    [
-      /*
-       *  Build main index to be able import all hooks or components you want from one place.
-       */
+  return copy({
+    targets: [
       {
-        input: {
-          'dist/index.esm': 'src/index.ts',
-          'firebase/dist/index.esm': 'src/hooks/useFirebase/index.ts',
-          'firestore/dist/index.esm': 'src/hooks/useFirestoreServices/index.ts'
-        },
-        output: {
-          dir: './',
-          format: 'es',
-          chunkFileNames: 'dist/[name]-[hash].js'
-        },
-        // Adding minification(using terser plugin) for this files reduce size of bundle twice.
-        plugins: [
-          ...plugins,
-          // flatDts(),
-          terser(),
-          copy({
-            targets: [
-              {
-                src: `src/hooks/useFirebase/package.json`,
-                dest: 'firebase'
-              }
-            ]
-          }),
-          copy({
-            targets: [
-              {
-                src: `src/hooks/useFirestoreServices/package.json`,
-                dest: 'firestore'
-              }
-            ]
-          })
-        ],
-        external
-      },
-      {
-        // path to your declaration files root
-        input: {
-          'dist/index': 'src/index.d.ts',
-          'firebase/dist/index': 'src/hooks/useFirebase/types.d.ts',
-          'firestore/dist/index': 'src/hooks/useFirestoreServices/types.d.ts'
-        },
-        output: [{ dir: './', format: 'es' }],
-        plugins: [dts()]
+        src: `${sourceInputPath}/package.json`,
+        dest: name
       }
     ]
-  )
+  })
+})
+
+/*
+ * Build script.
+ *
+ * First argument is config for main index.ts which includes imports from all subpackages
+ * and main declaration file which include declaration from subpackages.
+ * Second argument is generated build config for each subpackage.
+ *
+ * All values from map pass to lodash "merge" function to concat same fields into one config object to
+ * implement multiple source inputs in rollup(which in this way build package separately into different chunks,
+ * not into one index.esm.js file)
+ *
+ */
+export default _.merge(
+  [
+    /*
+     *  Build main index to be able import all hooks or components you want from one place.
+     */
+    {
+      input: {
+        [`${buildFolder}/index.esm`]: 'src/index.ts'
+      },
+      /*
+       *  To enable code splitting(chunks) in config need to be set output.dir, not output.file.
+       *  And set chunkFileName to define how rollup will named chunks.
+       */
+      output: {
+        dir: './',
+        format: 'es',
+        chunkFileNames: `${buildFolder}/[name].js`
+      },
+      plugins: [...plugins, ...copyPluginConfig],
+      external
+    },
+    /*
+     *  Separate config, needs to "copy" main declaration file into result build folder.
+     */
+    {
+      // Path to index declaration file.
+      input: {
+        [`${buildFolder}/index`]: 'src/index.d.ts'
+      },
+      output: [{ dir: './', format: 'es' }],
+      plugins: [dts()]
+    }
+  ],
+  ...subpackages.map(({ name, path }) => {
+    // There is path to subpackage source folder.
+    const sourceInputPath = `src/hooks/${path}`
+
+    // Write here only fields which are different from main config and need to be concat with it.
+    return [
+      {
+        input: {
+          [`${name}/${buildFolder}/index.esm`]: `${sourceInputPath}/index.ts`
+        }
+      },
+      /*
+       * Separate config, needs to "copy" declaration file into each subpackage result build folder.
+       */
+      {
+        // Generate path to declaration file.
+        input: {
+          [`${name}/${buildFolder}/index`]: `${sourceInputPath}/types.d.ts`
+        }
+      }
+    ]
+  })
+)
