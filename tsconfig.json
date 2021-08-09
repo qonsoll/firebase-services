@@ -1,0 +1,25 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+//    "declaration": true,
+//    "declarationDir": "dist",
+
+    "importHelpers": true,
+    "lib": ["es2017", "dom"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "outDir": "dist",
+    "esModuleInterop":true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es5",
+    "typeRoots": ["../node_modules/@types"],
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "src/**/*"
+  ],  "exclude": ["dist",".idea", "rollup.config.js",    "node_modules"]
+}

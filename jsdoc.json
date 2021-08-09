@@ -1,0 +1,26 @@
+{
+
+  "source": {
+    "include": ["src"],
+    "includePattern": "\\.(jsx|js|ts|tsx)$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "plugins": [
+    "node_modules/better-docs/typescript"
+
+  ],
+  "typescript": {
+    "moduleRoot": "src"
+  },
+  "templates": {
+    "better-docs": {
+      "name": "My React components"
+    }
+  },
+  "opts": {
+    "template": "node_modules/better-docs",
+    "destination": "docs",
+    "recurse": true,
+    "readme": "README.md"
+  }
+}

@@ -1,0 +1,126 @@
+import _ from 'lodash'
+import mainPkg from './package.json'
+
+// Importing plugins for rollup.
+import resolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
+import peerDepsExternal from 'rollup-plugin-peer-deps-external'
+import { terser } from 'rollup-plugin-terser'
+import copy from 'rollup-plugin-copy'
+import typescript from 'rollup-plugin-typescript2'
+import dts from 'rollup-plugin-dts'
+
+const buildFolder = 'dist'
+
+// Creating reference map between subpackage name and it folder name in hooks folder.
+const subpackages = [
+  { path: 'useFirebase', name: 'firebase' },
+  // { path: 'useAuthServices', name: 'auth' },
+  // { path: 'useDatabaseServices', name: 'database' },
+  { path: 'useFirestoreServices', name: 'firestore' }
+  // { path: 'useStorageServices', name: 'storage' }
+]
+
+// Declaring peer dependencies for package. Get some from main package.json and add additional dependencies.
+const peerDependencies = mainPkg.peerDependencies || {}
+const external = [
+  ...Object.keys(peerDependencies),
+  'react-dom',
+  'firebase/auth',
+  'firebase/database',
+  'firebase/firestore',
+  'firebase/storage'
+]
+
+// Configure additional plugins for build
+const plugins = [
+  peerDepsExternal(), // peerDepsExternal plugin doing magic with dependencies and package size reduce twice.
+  terser(), // terser plugin doing code uglify and package size reduce twice.
+  commonjs(),
+  resolve(),
+  typescript({
+    typescript: require('typescript')
+  })
+]
+
+const copyPluginConfig = subpackages.map(({ name, path }) => {
+  const sourceInputPath = `src/hooks/${path}`
+
+  return copy({
+    targets: [
+      {
+        src: `${sourceInputPath}/package.json`,
+        dest: name
+      }
+    ]
+  })
+})
+
+/*
+ * Build script.
+ *
+ * First argument is config for main index.ts which includes imports from all subpackages
+ * and main declaration file which include declaration from subpackages.
+ * Second argument is generated build config for each subpackage.
+ *
+ * All values from map pass to lodash "merge" function to concat same fields into one config object to
+ * implement multiple source inputs in rollup(which in this way build package separately into different chunks,
+ * not into one index.esm.js file)
+ *
+ */
+export default _.merge(
+  [
+    /*
+     *  Build main index to be able import all hooks or components you want from one place.
+     */
+    {
+      input: {
+        [`${buildFolder}/index.esm`]: 'src/index.ts'
+      },
+      /*
+       *  To enable code splitting(chunks) in config need to be set output.dir, not output.file.
+       *  And set chunkFileName to define how rollup will named chunks.
+       */
+      output: {
+        dir: './',
+        format: 'es',
+        chunkFileNames: `${buildFolder}/[name].js`
+      },
+      plugins: [...plugins, ...copyPluginConfig],
+      external
+    },
+    /*
+     *  Separate config, needs to "copy" main declaration file into result build folder.
+     */
+    {
+      // Path to index declaration file.
+      input: {
+        [`${buildFolder}/index`]: 'src/index.d.ts'
+      },
+      output: [{ dir: './', format: 'es' }],
+      plugins: [dts()]
+    }
+  ],
+  ...subpackages.map(({ name, path }) => {
+    // There is path to subpackage source folder.
+    const sourceInputPath = `src/hooks/${path}`
+
+    // Write here only fields which are different from main config and need to be concat with it.
+    return [
+      {
+        input: {
+          [`${name}/${buildFolder}/index.esm`]: `${sourceInputPath}/index.ts`
+        }
+      },
+      /*
+       * Separate config, needs to "copy" declaration file into each subpackage result build folder.
+       */
+      {
+        // Generate path to declaration file.
+        input: {
+          [`${name}/${buildFolder}/index`]: `${sourceInputPath}/types.d.ts`
+        }
+      }
+    ]
+  })
+)

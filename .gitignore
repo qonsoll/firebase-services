@@ -6,6 +6,11 @@ package-lock.json
 
 # Rollup build output
 **/dist
+firebase/*
+firestore/*
+auth/*
+database/*
+storage/*
 
 # OS files
 .DS_Store
