@@ -15,7 +15,7 @@ const buildFolder = 'dist'
 // Creating reference map between subpackage name and it folder name in hooks folder.
 const subpackages = [
   { path: 'useFirebase', name: 'firebase' },
-  // { path: 'useAuthServices', name: 'auth' },
+  { path: 'useAuthServices', name: 'auth' },
   // { path: 'useDatabaseServices', name: 'database' },
   { path: 'useFirestoreServices', name: 'firestore' }
   // { path: 'useStorageServices', name: 'storage' }
