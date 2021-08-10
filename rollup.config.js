@@ -16,7 +16,7 @@ const buildFolder = 'dist'
 const subpackages = [
   { path: 'useFirebase', name: 'firebase' },
   { path: 'useAuthServices', name: 'auth' },
-  // { path: 'useDatabaseServices', name: 'database' },
+  { path: 'useDatabaseServices', name: 'database' },
   { path: 'useFirestoreServices', name: 'firestore' }
   // { path: 'useStorageServices', name: 'storage' }
 ]

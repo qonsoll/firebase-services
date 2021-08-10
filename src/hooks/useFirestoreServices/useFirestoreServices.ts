@@ -1,5 +1,5 @@
 import 'firebase/firestore'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import useFirebase from '../useFirebase'
 import * as services from '../../services/firestore'
 
@@ -23,7 +23,7 @@ import * as services from '../../services/firestore'
  */
 const useFirestoreServices = () => {
   const firebase = useFirebase()
-  const firestore = firebase!.firestore()
+  const firestore = useMemo(() => firebase!.firestore(), [firebase])
 
   const getCollectionRef = useCallback(
     (path: string) => services.getCollectionRef(firestore, path),

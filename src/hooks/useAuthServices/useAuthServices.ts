@@ -1,18 +1,26 @@
 import 'firebase/auth'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import useFirebase from '../useFirebase'
 import * as services from '../../services/auth'
 
 const useAuthServices = () => {
   const firebase = useFirebase()
-  const auth = firebase!.auth()
+  const auth = useMemo(() => firebase!.auth(), [firebase])
 
   const loginWithGoogle = useCallback(
     () => services.loginWithGoogle(auth),
     [auth]
   )
+  const loginWithFacebook = useCallback(
+    () => services.loginWithFacebook(auth),
+    [auth]
+  )
+  const sendVerifyEmail = useCallback(
+    () => services.sendVerifyEmail(auth),
+    [auth]
+  )
 
-  return { loginWithGoogle }
+  return { loginWithGoogle, loginWithFacebook, sendVerifyEmail }
 }
 
 export default useAuthServices
