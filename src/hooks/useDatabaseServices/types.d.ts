@@ -1,6 +1,7 @@
 import firebase from 'firebase'
 
 declare function useDatabaseServices(): {
+  database: firebase.database.Database
   /**
    * @info getReferenceChild (11 May 2021) // CREATION DATE
    *

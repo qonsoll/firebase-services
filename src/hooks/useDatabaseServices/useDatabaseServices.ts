@@ -12,7 +12,8 @@ const useDatabaseServices = () => {
     [database]
   )
 
-  return { getReferenceChild }
+  return { database, getReferenceChild }
 }
 
 export default useDatabaseServices
+export { useDatabaseServices }

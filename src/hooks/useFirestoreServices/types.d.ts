@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 
 declare function useFirestoreServices(): {
+  firestore: firebase.firestore.Firestore
   /**
    * @function getCollectionRef
    * @comment getCollectionRef - function for get firestore collection reference.

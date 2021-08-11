@@ -35,6 +35,7 @@ const useFirestoreServices = () => {
   )
 
   return {
+    firestore,
     getCollectionRef,
     getDocumentRef
   }

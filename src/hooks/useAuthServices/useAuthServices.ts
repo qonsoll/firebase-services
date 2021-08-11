@@ -20,7 +20,8 @@ const useAuthServices = () => {
     [auth]
   )
 
-  return { loginWithGoogle, loginWithFacebook, sendVerifyEmail }
+  return { auth, loginWithGoogle, loginWithFacebook, sendVerifyEmail }
 }
 
 export default useAuthServices
+export { useAuthServices }

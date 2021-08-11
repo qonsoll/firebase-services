@@ -17,8 +17,8 @@ const subpackages = [
   { path: 'useFirebase', name: 'firebase' },
   { path: 'useAuthServices', name: 'auth' },
   { path: 'useDatabaseServices', name: 'database' },
-  { path: 'useFirestoreServices', name: 'firestore' }
-  // { path: 'useStorageServices', name: 'storage' }
+  { path: 'useFirestoreServices', name: 'firestore' },
+  { path: 'useStorageServices', name: 'storage' }
 ]
 
 // Declaring peer dependencies for package. Get some from main package.json and add additional dependencies.

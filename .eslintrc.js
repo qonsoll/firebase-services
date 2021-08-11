@@ -37,6 +37,12 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     'react/react-in-jsx-scope': 0,
     'import/no-anonymous-default-export': 0,
+    '@typescript-eslint/consistent-type-assertions': [
+      'error',
+      {
+        assertionStyle: 'angle-bracket'
+      }
+    ],
     'prettier/prettier': 'error'
   }
 }

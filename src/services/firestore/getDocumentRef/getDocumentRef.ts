@@ -5,7 +5,7 @@ import firebase from 'firebase/app'
 /**
  * @info getDocumentRef (06 Apr 2021) // CREATION DATE
  * @access private
- * @comment getDocumentRef - function for get document reference.*
+ * @comment getDocumentRef - function for get document reference.
  * @since 08 Aug 2021 ( v.0.0.2 ) // LAST-EDIT DATE
  *
  * @param 		firestore		The Cloud Firestore service interface.

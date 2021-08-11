@@ -1,4 +1,7 @@
+import firebase from 'firebase'
+
 declare function useAuthServices(): {
+  auth: firebase.auth.Auth
   /**
    * @info loginWithFacebook (23 Jun 2021) // CREATION DATE
    * @access public
