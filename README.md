@@ -29,7 +29,30 @@ npm install @qonsoll/firebase-services
 yarn add @qonsoll/firebase-services
 ```
 
-## Documentation
+
+## Usage
+
+```js
+// Previusly you need to init your firebase app and add necessary imports.
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/storage'
+import 'firebase/database'
+import 'firebase/firestore'
+// Use default import to name it as you want.
+import FBSProvider from '@qonsoll/firebase-services'
+// or use named import.
+// import { FirebaseServicesProvider } from '@qonsoll/firebase-services'
+
+
+const App = () => (
+  <FBSProvider firebase={firebase}>
+	{/* Components */}
+  </FBSProvider>
+)
+```
+
+### Documentation
 
 - [Auth services](/src/hooks/useAuthServices)
 - [Cloud Firestore services](/src/hooks/useFirestoreServices)

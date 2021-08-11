@@ -1,4 +1,3 @@
-import 'firebase/auth'
 import { useCallback, useMemo } from 'react'
 import useFirebase from '../useFirebase'
 import * as services from '../../services/auth'

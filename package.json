@@ -1,6 +1,6 @@
 {
   "name": "@qonsoll/firebase-services",
-  "version": "1.2.0",
+  "version": "2.0.2",
   "description": "",
   "scripts": {
     "docs": "jsdoc -c jsdoc.json",
@@ -20,17 +20,16 @@
     "services"
   ],
   "files": [
-    "auth/dist/*.js",
+    "auth/dist",
     "auth/package.json",
-    "database/dist/*.js",
+    "database/dist",
     "database/package.json",
-    "dist/*.js",
-    "dist/*.js.map",
-    "firestore/dist/*.js",
+    "dist/",
+    "firestore/dist",
     "firestore/package.json",
-    "firebase/dist/*.js",
+    "firebase/dist",
     "firebase/package.json",
-    "storage/dist/*.js",
+    "storage/dist",
     "storage/package.json"
   ],
   "peerDependencies": {
