@@ -48,8 +48,14 @@ const copyPluginConfig = subpackages.map(({ name, path }) => {
 
   return copy({
     targets: [
+      // Copy package.json files into build folder to be able imports "subpackages"
       {
         src: `${sourceInputPath}/package.json`,
+        dest: name
+      },
+      // Copy README files into build folder for
+      {
+        src: `${sourceInputPath}/README.md`,
         dest: name
       }
     ]

@@ -1,7 +1,9 @@
 {
   "name": "@qonsoll/firebase-services",
-  "version": "2.0.2",
-  "description": "",
+  "version": "2.0.4",
+  "description": "Service functions for Firebase",
+  "homepage": "https://github.com/qonsoll/firebase-services",
+  "bugs": "https://github.com/qonsoll/firebase-services/issues",
   "scripts": {
     "docs": "jsdoc -c jsdoc.json",
     "build": "npm run clean && rollup -c",

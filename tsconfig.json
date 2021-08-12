@@ -1,9 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-//    "declaration": true,
-//    "declarationDir": "dist",
-
     "importHelpers": true,
     "lib": ["es2017", "dom"],
     "module": "ESNext",
@@ -16,10 +13,16 @@
     "strict": true,
     "target": "es5",
     "typeRoots": ["../node_modules/@types"],
-    "allowSyntheticDefaultImports": true,
-    "jsx": "react-jsx"
+    "allowSyntheticDefaultImports": true, // To not write import * as React enable this option.
+    "jsx": "react-jsx" // To not write import React in every file use 'react-jsx' option.
   },
   "include": [
     "src/**/*"
-  ],  "exclude": ["dist",".idea", "rollup.config.js",    "node_modules"]
+  ],
+  "exclude": [
+    "dist",
+    ".idea",
+    "rollup.config.js",
+    "node_modules"
+  ]
 }
