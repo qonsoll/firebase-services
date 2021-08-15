@@ -1,13 +1,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "importHelpers": true,
+    "importHelpers": true,  // To enable this feature you need to add tslib package as peer dependency.
     "lib": ["es2017", "dom"],
     "module": "ESNext",
     "moduleResolution": "node",
     "noImplicitAny": false,
     "noUnusedLocals": true,
-    "outDir": "dist",
     "esModuleInterop":true,
     "sourceMap": true,
     "strict": true,

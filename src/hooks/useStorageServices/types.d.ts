@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 
 declare function useStorageServices(): {
   storage: firebase.storage.Reference
@@ -6,6 +6,7 @@ declare function useStorageServices(): {
     path?: string
     url?: string
   }): firebase.storage.Reference
+  deleteFile(options: { path?: string; url?: string }): Promise<any | boolean>
   getUrl(reference: firebase.storage.Reference): Promise<string | any>
   upload(
     file: File,

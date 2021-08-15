@@ -38,15 +38,14 @@ yarn add @qonsoll/firebase-services
 
 ```js
 import { initFirebaseApp } from '@qonsoll/firebase-servcies'
-const firebaseConfig = {
-	apiKey: "AIza....",                             // Auth / General Use
-	appId: "1:27992087142:web:ce....",              // General Use
-	projectId: "my-firebase-project",               // General Use
-	authDomain: "YOUR_APP.firebaseapp.com",         // Auth with popup/redirect
-	databaseURL: "https://YOUR_APP.firebaseio.com", // Realtime Database
-	storageBucket: "YOUR_APP.appspot.com",          // Storage
-	messagingSenderId: "123456789",                 // Cloud Messaging
-	measurementId: "G-12345"                        // Analytics
+export const firebaseConfig = {		
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID
 }
 
 initFirebaseApp(firebaseConfig)
@@ -67,7 +66,7 @@ import FBSProvider from '@qonsoll/firebase-services'
 // import { FirebaseServicesProvider } from '@qonsoll/firebase-services'
 
 
-const App = () => (
+const App = () => ( 
   <FBSProvider firebase={firebase}>
 	{/* Components */}
   </FBSProvider>

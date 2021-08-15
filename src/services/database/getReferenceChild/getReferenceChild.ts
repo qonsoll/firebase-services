@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 
 /**
  * @info getReferenceChild (11 May 2021) // CREATION DATE

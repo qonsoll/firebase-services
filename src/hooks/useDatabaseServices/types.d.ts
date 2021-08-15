@@ -1,13 +1,19 @@
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 
 declare function useDatabaseServices(): {
   database: firebase.database.Database
   /**
+   * @function getReferenceChild
+   * @comment getReferenceChild - function for get path to child from realtime database.
+   * @access public
    * @info getReferenceChild (11 May 2021) // CREATION DATE
+   * @since 10 Aug 2021 // LAST-EDIT DATE
+   * @version 0.0.1
    *
-   * @comment getReferenceChild - function for get path to child from realtime database
+   * @description Using with [react-firebase-hooks]{@link https://github.com/csfrequency/react-firebase-hooks/tree/1d1ca28241ece8f4662aa2aeadff132cd880c32b/database#useobject} as a query.
+   * @example
+   * const [data, loading] = useObjectVal(getReferenceChild('pathToCollection'))
    *
-   * @since 10 Aug 2021 ( v.0.0.1 ) // LAST-EDIT DATE
    *
    * @param    path        Path to child from realtime database
    *

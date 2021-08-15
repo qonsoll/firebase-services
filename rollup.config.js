@@ -52,11 +52,6 @@ const copyPluginConfig = subpackages.map(({ name, path }) => {
       {
         src: `${sourceInputPath}/package.json`,
         dest: name
-      },
-      // Copy README files into build folder for
-      {
-        src: `${sourceInputPath}/README.md`,
-        dest: name
       }
     ]
   })
@@ -103,7 +98,7 @@ export default _.merge(
       input: {
         [`${buildFolder}/index`]: 'src/index.d.ts'
       },
-      output: [{ dir: './', format: 'es' }],
+      output: { dir: './', format: 'es' },
       plugins: [dts()]
     }
   ],

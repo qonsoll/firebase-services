@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 
 /** @module @qonsoll/firebase-services/storage */
 
