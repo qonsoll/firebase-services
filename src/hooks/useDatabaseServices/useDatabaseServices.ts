@@ -10,8 +10,9 @@ const useDatabaseServices = () => {
     (path: string) => services.getReferenceChild(database, path),
     [database]
   )
+  const getTimestamp = useCallback(() => services.getTimestamp(), [])
 
-  return { database, getReferenceChild }
+  return { database, getReferenceChild, getTimestamp }
 }
 
 export default useDatabaseServices

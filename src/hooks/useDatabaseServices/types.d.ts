@@ -20,6 +20,8 @@ declare function useDatabaseServices(): {
    * @return {firebase.database.Reference} Database Reference.
    */
   getReferenceChild(path: string): firebase.database.Reference
+
+  getTimestamp(): typeof firebase.database.ServerValue.TIMESTAMP
 }
 
 export default useDatabaseServices

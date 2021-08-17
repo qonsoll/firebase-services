@@ -1,5 +1,17 @@
 import firebase from 'firebase/app'
 
+type updateDocumentOption = {
+  merge?: boolean
+  withoutUndef?: boolean
+}
+type createDocumentOption = {
+  idField?: string
+  withoutUndef?: boolean
+}
+type getCollectionDataArgs = {
+  path: string
+  ref: firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
+}
 declare function useFirestoreServices(): {
   firestore: firebase.firestore.Firestore
   /**
@@ -60,6 +72,28 @@ declare function useFirestoreServices(): {
   getDocumentRef(
     path: string
   ): firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
+
+  getTimestamp(): firebase.firestore.Timestamp
+  getCollectionData(args: getCollectionDataArgs): Object[]
+
+  getDocumentData(path: string, id: string): object
+
+  updateDocument(
+    path: string,
+    id: string,
+    data: object,
+    options: updateDocumentOption
+  ): Promise<void>
+
+  createDocument(
+    path: string,
+    data: object,
+    options: createDocumentOption
+  ):
+    | Promise<
+        firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
+      >
+    | object
 }
 
 export default useFirestoreServices

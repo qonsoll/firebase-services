@@ -4,7 +4,7 @@ declare type ProviderProps = {
 }
 
 // @ts-ignore
-declare const Provider: (props: ProviderProps) => JSX.Element
+declare const FirebaseServicesProvider: (props: ProviderProps) => JSX.Element
 
-export default Provider
-export { Provider, ProviderProps }
+export default FirebaseServicesProvider
+export { FirebaseServicesProvider, ProviderProps }
