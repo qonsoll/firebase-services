@@ -7,7 +7,7 @@ const useAuthServices = () => {
   const firebase = useFirebase()
 
   // [COMPUTED_PROPERTIES]
-  const auth = useMemo(() => firebase!.auth(), [firebase])
+  const auth = useMemo(() => firebase!.auth?.(), [firebase])
 
   // [CLEAN_FUNCTIONS]
   const loginWithGoogle = useCallback(

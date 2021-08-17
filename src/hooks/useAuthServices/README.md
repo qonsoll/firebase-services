@@ -7,7 +7,7 @@ import { Button } from '@qonsoll/react-design'
 // Using named export from auth 'subpackage' <- preferred variant
 import { useAuthServices } from '@qonsoll/firebase-services/auth'
 
-// Using named export from 'subpackage' index.
+// Using default export from 'subpackage' index.
 // import useFirebaseAuthServices from '@qonsoll/firebase-services/auth'
 
 // Using named export from main library index.
