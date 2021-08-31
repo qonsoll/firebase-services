@@ -1,6 +1,9 @@
 import firebase from 'firebase/app'
 
 declare function useAuthServices(): {
+  /**
+   * The Firebase Auth service interface.
+   */
   auth: firebase.auth.Auth
   /**
    * @function loginWithFacebook
@@ -30,7 +33,7 @@ declare function useAuthServices(): {
    * @function sendVerifyEmail
    * @comment sendVerifyEmail - function that send verification email to user.
    * @access public
-   * @info loginWithFacebook (23 Jun 2021) // CREATION DATE
+   * @info sendVerifyEmail (23 Jun 2021) // CREATION DATE
    * @since 10 Jun 2021 // LAST-EDIT DATE
    * @version 0.0.1
    *

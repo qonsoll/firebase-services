@@ -1,3 +1,4 @@
+import 'firebase/auth'
 import { useCallback, useMemo } from 'react'
 import useFirebase from '../useFirebase'
 import * as services from '../../services/auth'
@@ -7,7 +8,7 @@ const useAuthServices = () => {
   const firebase = useFirebase()
 
   // [COMPUTED_PROPERTIES]
-  const auth = useMemo(() => firebase!.auth?.(), [firebase])
+  const auth = useMemo(() => firebase!.auth(), [firebase])
 
   // [CLEAN_FUNCTIONS]
   const loginWithGoogle = useCallback(

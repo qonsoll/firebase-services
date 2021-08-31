@@ -12,7 +12,7 @@ import firebase from 'firebase/app'
  * @param {firebase.firestore.Firestore}                          firestore   The Cloud Firestore service interface.
  * @param {Object}                                                params
  * @param {string}                                                params.path                Path to collection.
- * @param {CollectionReference<DocumentData>}          params.ref                 Collection reference.
+ * @param {CollectionReference<DocumentData>}                     params.ref                 Collection reference.
  *
  * @return {Object[]} array of document's data
  */
