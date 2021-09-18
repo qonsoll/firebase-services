@@ -1,4 +1,3 @@
-import 'firebase/database'
 import { useCallback, useMemo } from 'react'
 import useFirebase from '../useFirebase'
 import * as services from '../../services/database'
@@ -11,7 +10,10 @@ const useDatabaseServices = () => {
     (path: string) => services.getReferenceChild(database, path),
     [database]
   )
-  const getTimestamp = useCallback(() => services.getTimestamp(), [])
+  const getTimestamp = useCallback(
+    () => services.getTimestamp(firebase),
+    [firebase]
+  )
 
   return { database, getReferenceChild, getTimestamp }
 }

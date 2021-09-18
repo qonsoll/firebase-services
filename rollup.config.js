@@ -85,7 +85,19 @@ export default _.merge(
       output: {
         dir: './',
         format: 'es',
-        chunkFileNames: `${buildFolder}/[name].js`
+        chunkFileNames: `${buildFolder}/esm/[name].js`
+      },
+      plugins: [...plugins, ...copyPluginConfig],
+      external
+    },
+    {
+      input: {
+        [`${buildFolder}/index.cjs`]: 'src/index.ts'
+      },
+      output: {
+        dir: './',
+        format: 'cjs',
+        chunkFileNames: `${buildFolder}/cjs/[name].js`
       },
       plugins: [...plugins, ...copyPluginConfig],
       external
@@ -111,6 +123,11 @@ export default _.merge(
       {
         input: {
           [`${name}/${buildFolder}/index.esm`]: `${sourceInputPath}/index.ts`
+        }
+      },
+      {
+        input: {
+          [`${name}/${buildFolder}/index.cjs`]: `${sourceInputPath}/index.ts`
         }
       },
       /*

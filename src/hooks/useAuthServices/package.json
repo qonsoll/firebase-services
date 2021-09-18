@@ -1,5 +1,6 @@
 {
   "name": "@qonsoll/firebase-services/auth",
   "module": "dist/index.esm.js",
+  "main": "dist/index.cjs.js",
   "types": "dist/index.d.ts"
 }

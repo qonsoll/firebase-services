@@ -1,4 +1,3 @@
-import 'firebase/firestore'
 import { useCallback, useMemo } from 'react'
 import useFirebase from '../useFirebase'
 import * as services from '../../services/firestore'
@@ -37,7 +36,10 @@ const useFirestoreServices = () => {
     [firestore]
   )
 
-  const getTimestamp = useCallback(() => services.getTimestamp(), [])
+  const getTimestamp = useCallback(
+    () => services.getTimestamp(firebase),
+    [firebase]
+  )
 
   const getCollectionData = useCallback(
     (reference) => services.getCollectionData(firestore, reference),

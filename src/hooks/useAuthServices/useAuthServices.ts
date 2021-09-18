@@ -1,4 +1,3 @@
-import 'firebase/auth'
 import { useCallback, useMemo } from 'react'
 import useFirebase from '../useFirebase'
 import * as services from '../../services/auth'
@@ -12,12 +11,12 @@ const useAuthServices = () => {
 
   // [CLEAN_FUNCTIONS]
   const loginWithGoogle = useCallback(
-    () => services.loginWithGoogle(auth),
-    [auth]
+    () => services.loginWithGoogle(firebase, auth),
+    [firebase, auth]
   )
   const loginWithFacebook = useCallback(
-    () => services.loginWithFacebook(auth),
-    [auth]
+    () => services.loginWithFacebook(firebase, auth),
+    [firebase, auth]
   )
   const sendVerifyEmail = useCallback(
     () => services.sendVerifyEmail(auth),

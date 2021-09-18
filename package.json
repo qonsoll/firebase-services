@@ -1,6 +1,6 @@
 {
   "name": "@qonsoll/firebase-services",
-  "version": "2.0.10",
+  "version": "2.0.13",
   "description": "Service functions for Firebase",
   "homepage": "https://github.com/qonsoll/firebase-services",
   "bugs": "https://github.com/qonsoll/firebase-services/issues",
@@ -17,6 +17,7 @@
   "author": "qonsoll",
   "license": "MIT",
   "module": "dist/index.esm.js",
+  "main": "dist/index.cjs.js",
   "types": "dist/index.d.ts",
   "keywords": [
     "react",
@@ -39,7 +40,7 @@
     "storage/package.json"
   ],
   "peerDependencies": {
-    "firebase": ">= 8.8.0",
+    "firebase": "8.8.1",
     "lodash": ">= 4.17.0",
     "react": ">= 16.8.0",
     "tslib": ">= 2.0.0"
