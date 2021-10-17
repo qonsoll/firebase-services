@@ -44,5 +44,13 @@ module.exports = {
       }
     ],
     'prettier/prettier': 'error'
-  }
+  },
+  overrides: [
+    {
+      files: ['*.test.ts'],
+      rules: {
+        'import/first': 'off'
+      }
+    }
+  ]
 }

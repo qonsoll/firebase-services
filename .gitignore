@@ -19,9 +19,16 @@ storage/*
 .nyc_output
 coverage
 
-#test files
+# test files
 /example
 
 
-#npm pack output
+# npm pack output
 *.tgz
+
+
+# env
+.env
+
+# firebase log files
+*.log

@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "types": ["@types/jest", "@types/node"],
     "importHelpers": true,  // To enable this feature you need to add tslib package as peer dependency.
     "lib": ["es2017", "dom"],
     "module": "ESNext",
@@ -13,7 +14,8 @@
     "target": "es5",
     "typeRoots": ["../node_modules/@types"],
     "allowSyntheticDefaultImports": true, // To not write import * as React enable this option.
-    "jsx": "react-jsx" // To not write import React in every file use 'react-jsx' option.
+    "jsx": "react-jsx", // To not write import React in every file use 'react-jsx' option.
+    "baseUrl": "./src"
   },
   "include": [
     "src/**/*"

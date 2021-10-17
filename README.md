@@ -9,7 +9,7 @@
 
 ## Install
 
-@qonsoll/firebase-services requires **React 16.8.0 or later** and **Firebase v8.8.0 or later**.
+@qonsoll/firebase-services requires **React 16.8.0 or later** and **Firebase 8.8.0 <= version < 9**.
 
 ### Install dependencies
 
