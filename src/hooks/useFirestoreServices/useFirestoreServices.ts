@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import useFirebase from '../useFirebase'
 import * as services from '../../services/firestore'
+import { getCollectionDataArgs } from './types'
 /**
  * @typedef {object} firestoreServices
  * @property {function} getCollectionRef - {@link getCollectionRef documentation}
@@ -42,21 +43,27 @@ const useFirestoreServices = () => {
   )
 
   const getCollectionData = useCallback(
-    (reference) => services.getCollectionData(firestore, reference),
+    (reference: getCollectionDataArgs) =>
+      services.getCollectionData(firestore, reference),
     [firestore]
   )
   const getDocumentData = useCallback(
-    (path, id) => services.getDocumentData(firestore, path, id),
+    (path: string, id: string) => services.getDocumentData(firestore, path, id),
+    [firestore]
+  )
+
+  const deleteDocument = useCallback(
+    (path: string, id: string) => services.deleteDocument(firestore, path, id),
     [firestore]
   )
 
   const updateDocument = useCallback(
-    (path, id, data, option) =>
+    (path: string, id: string, data: object, option: object | undefined) =>
       services.updateDocument(firestore, path, id, data, option),
     [firestore]
   )
   const createDocument = useCallback(
-    (path, data, options) =>
+    (path: string, data: object, options: object | undefined) =>
       services.createDocument(firestore, path, data, options),
     [firestore]
   )
@@ -69,7 +76,8 @@ const useFirestoreServices = () => {
     getCollectionData,
     getDocumentData,
     updateDocument,
-    createDocument
+    createDocument,
+    deleteDocument
   }
 }
 
