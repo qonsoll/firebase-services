@@ -14,7 +14,7 @@ const TEST_DATA = {
 
 describe('createDocument function', () => {
   test('Basic usage', async () => {
-    const data = await createDocument(
+    const data = await createDocument<typeof TEST_DATA>(
       firebase.firestore(),
       TEST_COLLECTION,
       TEST_DATA
@@ -68,6 +68,17 @@ describe('createDocument function', () => {
         'idField must be a string | undefined | null | false'
       )
     })
+    test('idField disabled', async () => {
+      const data = await createDocument(
+        firebase.firestore(),
+        TEST_COLLECTION,
+        TEST_DATA,
+        {
+          idField: false
+        }
+      )
+      expect(data.id).toBeUndefined()
+    })
   })
 
   describe('Tests for option.withoutUndef', () => {
@@ -76,7 +87,7 @@ describe('createDocument function', () => {
 
     const testOption = (combine: string | boolean = 'id') => {
       test('TEST_DATA should be without undefined | null field, but include another falsy values.', async () => {
-        const data = await createDocument(
+        const data = await createDocument<typeof TEST_DATA>(
           firebase.firestore(),
           TEST_COLLECTION,
           TEST_DATA,
@@ -87,7 +98,7 @@ describe('createDocument function', () => {
         expect(data.avatarUrl).toBeUndefined()
       })
       test('TEST_DATA should contain all falsy values.', async () => {
-        const data = await createDocument(
+        const data = await createDocument<typeof TEST_DATA>(
           firebase.firestore(),
           TEST_COLLECTION,
           TEST_DATA,

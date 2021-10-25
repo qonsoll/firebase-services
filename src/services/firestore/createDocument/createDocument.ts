@@ -1,5 +1,5 @@
-import _ from 'lodash'
 import firebase from 'firebase/app'
+import { removeUndef } from 'helpers'
 import getDocumentRef from '../getDocumentRef'
 
 type option = {
@@ -7,7 +7,9 @@ type option = {
   withoutUndef?: boolean
   id?: string
 }
-
+type dataType<T extends {}> = T & {
+  id: string | undefined
+}
 /** @module @qonsoll/firebase-services/firestore */
 
 /**
@@ -15,48 +17,36 @@ type option = {
  * @access private
  * @comment
  *    createDocument - function for creating document in firestore with option to delete all undefined|null fields
- *    inside data argument and possibility to called field wich contain id of document.
+ *    inside data argument and possibility to called field which contain id of document.
  * @since 17 Oct 2021 ( v.0.0.4 ) // LAST-EDIT DATE
  *
  * @param {firebase.firestore.Firestore}          firestore                  The Cloud Firestore service interface.
- * @param {string}                                path                       Path to a collection.
+ * @param {string}                                collection                 Path to a collection.
  * @param {object}                                data                       An Object containing the data for the new document.
  * @param {object}                                [options]                  An object to configure the method behavior.
  * @param {string | undefined | null | boolean}   [options.idField]          Name of field with document id.
- * @param {boolean}                               [options.withoutUndef]     se to remove undefined field in data object.
- * @param {string}                                [options.id]               se to remove undefined field in data object.
+ * @param {boolean}                               [options.withoutUndef]     use to remove undefined field in data object.
+ * @param {string}                                [options.id]               use to set specific id for document on create.
  *
- * @return {object}
+ * @return {Promise<object>}
  */
-
-const createDocument = async (
+const createDocument = async <T>(
   firestore: firebase.firestore.Firestore,
-  path: string,
+  collection: string,
   data = {},
   options: option = {}
 ) => {
   const { idField = 'id', withoutUndef = true, id } = options
 
-  if (!['string', 'undefined', 'null'].includes(typeof idField)) {
-    if (idField) {
-      throw new Error('idField must be a string | undefined | null | false')
-    }
+  if (!['string', 'undefined'].includes(typeof idField) && idField) {
+    throw new Error('idField must be a string | undefined | null | false')
   }
 
-  const normalizeData = (data) =>
-    withoutUndef ? _.omitBy(data, _.isNil) : data
-
-  if (idField) {
-    const docId = id || getDocumentRef(firestore, path).id
-    const docData = { ...data, [<any>idField]: docId }
-    const buf = normalizeData(docData)
-    await firestore.collection(path).doc(docId).set(buf)
-    return buf
-  }
-
-  const buf = normalizeData(data)
-  const snapshot = await firestore.collection(path).add(buf)
-  return { ...buf, id: snapshot.id }
+  const docId = id || getDocumentRef(firestore, collection).id
+  const docData = idField ? { ...data, [<string>idField]: docId } : data
+  const normalizedData = removeUndef(withoutUndef, docData)
+  await firestore.collection(collection).doc(docId).set(normalizedData)
+  return <dataType<T>>normalizedData
 }
 
 export default createDocument
