@@ -14,12 +14,14 @@ type updateDocumentOption = {
 /**
  * @typedef createDocumentOption
  * @type {object}
- * @property {string}     [options.idField]          Name of field with document id.
- * @property {boolean}    [options.withoutUndef]     se to remove undefined field in data object.
+ * @param {string | undefined | null | boolean}   [options.idField]          Name of field with document id.
+ * @param {boolean}                               [options.withoutUndef]     use to remove undefined field in data object.
+ * @param {string}                                [options.id]               use to set specific id for document on create.
  */
 type createDocumentOption = {
-  idField?: string
+  idField?: string | undefined | null | boolean
   withoutUndef?: boolean
+  id?: string
 }
 
 /**
@@ -28,7 +30,7 @@ type createDocumentOption = {
  * @property {string}                                                                     [path]
  * @property {firebase.firestore.CollectionReference<firebase.firestore.DocumentData>}    [ref]
  */
-type getCollectionDataArgs = {
+export type getCollectionDataArgs = {
   path?: string
   ref?: firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
 }
@@ -57,12 +59,12 @@ declare function useFirestoreServices(): {
    * const [users, loading] = useCollectionData(getCollectionRef('users').where('role', '==', 'ADMIN'))
    *
    *
-   * @param  	path  	Path to collection.
+   * @param  	collection  	Path to collection.
    *
    * @return {firebase.firestore.CollectionReference<firebase.firestore.DocumentData>} The CollectionReference instance.
    */
   getCollectionRef(
-    path: string
+    collection: string
   ): firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
 
   /**
@@ -70,27 +72,29 @@ declare function useFirestoreServices(): {
    * @comment getDocumentRef - function for get firestore document reference.
    * @access public
    * @info getDocumentRef (06 Apr 2021) // CREATION DATE
-   * @since 06 Apr 2021 // LAST-EDIT DATE
-   * @version 0.0.1
+   * @since 23 Oct 2021 // LAST-EDIT DATE
+   * @version 0.0.2
    *
    *
    * ##Examples
-   * @description Using in special cases where you need document id before write it to firestore.
+   * @description Using in special cases where you need document **id** before write it to firestore.
    * @example
    * // Create document instance, get id, and use it to write in firestore document using this id.
    * const docId = getDocumentRef('users').id
    * const data = { id: docId }
-   * await createDocument('users', data, { docId })
+   * await createDocument('users', data, { id: docId })
    *
    * @description But [createDocument]{@link createDocument} function doing this under the hood.
    *
    *
-   * @param  	path  	Path to collection.
+   * @param  	collection  	Path to collection.
+   * @param  	id  	        Id of document.
    *
    * @return {firebase.firestore.DocumentReference<firebase.firestore.DocumentData>} The DocumentReference instance.
    */
   getDocumentRef(
-    path: string
+    collection: string,
+    id?: string
   ): firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
 
   /**
@@ -135,7 +139,7 @@ declare function useFirestoreServices(): {
    *
    *
    * @param {object}                                                                      args             An object to configure the method behavior.
-   * @param {object}                                                                      [args.path]      Path to collection.
+   * @param {string}                                                                      [args.path]      Path to collection.
    * @param {firebase.firestore.CollectionReference<firebase.firestore.DocumentData>}     [args.ref]
    *
    * @return {Object[]} Array of document's data
@@ -158,12 +162,12 @@ declare function useFirestoreServices(): {
    *   setData(data)
    * // ...
    *
-   * @param {string}      path        Path to collection
-   * @param {string}      id          Path of document
+   * @param {string}      collection    Path to collection
+   * @param {string}      id            Id of document
    *
    * @return {object}  Object of document's data
    */
-  getDocumentData(path: string, id: string): object
+  getDocumentData(collection: string, id: string): object
 
   /**
    * @function updateDocument
@@ -173,17 +177,17 @@ declare function useFirestoreServices(): {
    * @since 15 Apr 2021 // LAST-EDIT DATE
    * @version 0.0.3
    *
-   * @param {string}    path                      Path to a collection.
-   * @param {string}    id     	                  Path to a document.
+   * @param {string}    collection                Path to a collection.
+   * @param {string}    id     	                  Id of document.
    * @param {object}    data                      Data for the document.
    * @param {object}    [options]                 An object to configure the method behavior.
-   * @param {boolean}   [options.merge]           Use to update document instead of overwrite.
-   * @param {boolean}   [options.withoutUndef]    Use to remove undefined field in data object.
+   * @param {boolean}   [options.merge=true]           Use to update document instead of overwrite.
+   * @param {boolean}   [options.withoutUndef=true]    Use to remove undefined field in data object.
    *
    * @return {Promise<void>}
    */
   updateDocument(
-    path: string,
+    collection: string,
     id: string,
     data: object,
     options?: updateDocumentOption
@@ -194,26 +198,43 @@ declare function useFirestoreServices(): {
    * @comment createDocument - function for creating document in firestore with option to delete all undefined|null fields inside data argument and possibility to called field which contain id of document.
    * @access public
    * @info createDocument (06 Apr 2021) // CREATION DATE
-   * @since 15 Aug 2021 // LAST-EDIT DATE
-   * @version 0.0.3
+   * @since 17 Oct 2021 // LAST-EDIT DATE
+   * @version 0.0.4
    *
-   * @param {string}                        path                       Path to a collection.
-   * @param {object}                        data                       An Object containing the data for the new document.
-   * @param {object}                        [options]                  An object to configure the method behavior.
-   * @param {string}                        [options.idField]          Name of field with document id.
-   * @param {boolean}                       [options.withoutUndef]     se to remove undefined field in data object.
+   * @param {string}                                collection                    Path to a collection.
+   * @param {object}                                data                          An Object containing the data for the new document.
+   * @param {object}                                [options]                     An object to configure the method behavior.
+   * @param {string | undefined | null | boolean}   [options.idField=id]          Name of field with document id.
+   * @param {boolean}                               [options.withoutUndef=true]   Use to remove undefined field in data object.
+   * @param {string}                                [options.id]                  Use to set specific id for document on create.
    *
-   * @return {Promise<DocumentData> | object}
+   * @return {Promise<object>}
    */
-  createDocument(
-    path: string,
+  createDocument<T>(
+    collection: string,
     data: object,
     options?: createDocumentOption
   ):
+    | Promise<T & { id: string | undefined }>
     | Promise<
         firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
       >
-    | object
+    | Promise<object>
+
+  /**
+   * @function deleteDocument
+   * @comment deleteDocument - function for deleting document from firestore.
+   * @access public
+   * @info deleteDocument (06 Apr 2021) // CREATION DATE
+   * @since 15 Aug 2021 // LAST-EDIT DATE
+   * @version 0.0.2
+   *
+   * @param {string}       collection  Path to collection.
+   * @param {string}       id     	   Id of document.
+   *
+   * @return {Promise<void>}
+   */
+  deleteDocument(collection: string, id: string): Promise<void>
 }
 
 export default useFirestoreServices

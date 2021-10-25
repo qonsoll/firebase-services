@@ -1,5 +1,6 @@
 import firebase from 'firebase/app'
 import _ from 'lodash'
+import getDocumentRef from '../getDocumentRef'
 
 type option = {
   merge?: boolean
@@ -14,8 +15,8 @@ type option = {
  * @since 15 Apr 2021 ( v.0.0.4 ) // LAST-EDIT DATE
  *
  * @param {firebase.firestore.Firestore}  firestore                 The Cloud Firestore service interface.
- * @param {string}                        path                      Path to a collection.
- * @param {string}                        id     	                  Path to a document.
+ * @param {string}                        collection                Path to a collection.
+ * @param {string}                        id     	                  Id of document.
  * @param {object}                        data                      Data for the document.
  * @param {Object}                        [options]                 An object to configure the method behavior.
  * @param {boolean}                       [options.merge]           Use to update document instead of overwrite.
@@ -26,13 +27,13 @@ type option = {
 
 const updateDocument = (
   firestore: firebase.firestore.Firestore,
-  path: string,
+  collection: string,
   id: string,
   data: object,
   options: option = {}
 ) => {
   const { merge = true, withoutUndef = true } = options
-  const docRef = firestore.collection(path).doc(id)
+  const docRef = getDocumentRef(firestore, collection, id)
   const buf = withoutUndef ? _.omitBy(data, _.isNil) : data
   if (merge) {
     return docRef.set(buf, {

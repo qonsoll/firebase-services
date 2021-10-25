@@ -1,4 +1,5 @@
 import firebase from 'firebase/app'
+import { getCollectionDataArgs } from '../../../hooks/useFirestoreServices/types'
 
 /** @module @qonsoll/firebase-services/firestore */
 
@@ -19,12 +20,13 @@ import firebase from 'firebase/app'
 
 const getCollectionData = async (
   firestore: firebase.firestore.Firestore,
-  { path, ref }
+  { path, ref }: getCollectionDataArgs
 ) => {
   let data
   if (ref) {
     data = await ref.get()
   } else {
+    // @ts-ignore
     data = await firestore.collection(path).get()
   }
   return data.docs.map((item) => item.data())
