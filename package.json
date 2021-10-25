@@ -1,6 +1,6 @@
 {
   "name": "@qonsoll/firebase-services",
-  "version": "2.0.13",
+  "version": "2.0.14",
   "description": "Service functions for Firebase",
   "homepage": "https://github.com/qonsoll/firebase-services",
   "bugs": "https://github.com/qonsoll/firebase-services/issues",
@@ -13,7 +13,7 @@
     "clean": "rimraf ./dist auth database firestore storage firebase",
     "prepare": "npm run build",
     "test": "firebase emulators:exec jest",
-    "emulators:firebase": " firebase emulators:start --only firestore"
+    "emulators:firebase": "firebase emulators:start --only firestore"
   },
   "author": "qonsoll",
   "license": "MIT",
