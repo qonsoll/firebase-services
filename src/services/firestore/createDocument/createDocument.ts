@@ -2,14 +2,15 @@ import firebase from 'firebase/app'
 import { removeUndef } from 'helpers'
 import getDocumentRef from '../getDocumentRef'
 
-type option = {
+type option<T extends string> = {
   idField?: string | undefined | null | boolean
   withoutUndef?: boolean
-  id?: string
+  id?: T
 }
-type dataType<T extends {}> = T & {
-  id: string | undefined
-}
+type dataType<P extends {}, T extends string> = Record<
+  T | keyof P | string,
+  string
+>
 /** @module @qonsoll/firebase-services/firestore */
 
 /**
@@ -30,11 +31,11 @@ type dataType<T extends {}> = T & {
  *
  * @return {Promise<object>}
  */
-const createDocument = async <T>(
+const createDocument = async <P extends {}, T extends string>(
   firestore: firebase.firestore.Firestore,
   collection: string,
-  data = {},
-  options: option = {}
+  data = <P>{},
+  options: option<T> = {}
 ) => {
   const { idField = 'id', withoutUndef = true, id } = options
 
@@ -46,7 +47,7 @@ const createDocument = async <T>(
   const docData = idField ? { ...data, [<string>idField]: docId } : data
   const normalizedData = removeUndef(withoutUndef, docData)
   await firestore.collection(collection).doc(docId).set(normalizedData)
-  return <dataType<T>>normalizedData
+  return <dataType<P, T>>normalizedData
 }
 
 export default createDocument
